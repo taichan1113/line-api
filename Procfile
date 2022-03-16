@@ -1,1 +1,1 @@
-web: python test_repeatBot.py
+web: python main.py
