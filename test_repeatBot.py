@@ -13,11 +13,11 @@ from linebot.models import (
 
 app = Flask(__name__)
  #環境変数取得 
-YOUR_CHANNEL_ACCESS_TOKEN = os.environ["YOUR_CHANNEL_ACCESS_TOKEN"]
-YOUR_CHANNEL_SECRET = os.environ["YOUR_CHANNEL_SECRET"]
+MY_CHANNEL_ACCESS_TOKEN = os.environ["MY_CHANNEL_ACCESS_TOKEN"]
+MY_CHANNEL_SECRET = os.environ["MY_CHANNEL_SECRET"]
  #APIの設定 
-line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
-handler = WebhookHandler(YOUR_CHANNEL_SECRET)
+line_bot_api = LineBotApi(MY_CHANNEL_ACCESS_TOKEN)
+handler = WebhookHandler(MY_CHANNEL_SECRET)
  #テスト用 
 @app.route("/")
 def hello_world():
