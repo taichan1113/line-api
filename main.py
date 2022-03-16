@@ -49,4 +49,4 @@ def handle_follow(event):
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT"))
-    app.run(host="192.168.11.15", port=port)
+    app.run(host="0.0.0.0", port=port)
