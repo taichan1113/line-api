@@ -15,6 +15,7 @@ app = Flask(__name__)
  #環境変数取得 
 MY_CHANNEL_ACCESS_TOKEN = os.environ["MY_CHANNEL_ACCESS_TOKEN"]
 MY_CHANNEL_SECRET = os.environ["MY_CHANNEL_SECRET"]
+MY_BEEBOTTE_TOKEN = os.environ["MY_BEEBOTTE_TOKEN"]
  #APIの設定 
 line_bot_api = LineBotApi(MY_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(MY_CHANNEL_SECRET)
