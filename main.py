@@ -27,7 +27,7 @@ def publish_gpio_control_msg(msg):
                     payload=msg, \
                     hostname='mqtt.beebotte.com', \
                     port=8883, \
-                    auth = {'taichan':'token:{}'.format(MY_BEEBOTTE_TOKEN)}, \
+                    auth = {'username':'taichan','token':'{}'.format(MY_BEEBOTTE_TOKEN)}, \
                     tls={'ca_certs':'mqtt.beebotte.com.pem'})
 
 # get test
