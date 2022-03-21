@@ -23,11 +23,11 @@ handler = WebhookHandler(MY_CHANNEL_SECRET)
 
 # MQTT publish
 def publish_gpio_control_msg(msg):
-    publish.single('Documents/watering_system', \
-                    msg, \
+    publish.single('home_IoT/watering_system', \
+                    payload=msg, \
                     hostname='mqtt.beebotte.com', \
                     port=8883, \
-                    auth = {'username':'token:{}'.format(MY_BEEBOTTE_TOKEN)}, \
+                    auth = {'taichan':'token:{}'.format(MY_BEEBOTTE_TOKEN)}, \
                     tls={'ca_certs':'mqtt.beebotte.com.pem'})
 
 # get test
@@ -53,6 +53,9 @@ def handle_message(event):
     led_msg = [s.encode('utf-8') for s in ['LED', '電気']]
     if msg in led_msg:
         publish_gpio_control_msg('on')
+        line_bot_api.reply_message(
+           event.reply_token,
+           TextSendMessage(text='LED ON'))
     else:
         line_bot_api.reply_message(
            event.reply_token,
