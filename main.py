@@ -29,12 +29,6 @@ client.username_pw_set("token:{}".format(MY_BEEBOTTE_TOKEN))
 def publish_gpio_control_msg(msg):
     client.connect("mqtt.beebotte.com", 8883, 60)
     client.publish("home_IoT/watering_system", msg, 1)
-#     publish.single('home_IoT/watering_system', \
-#                     payload=msg, \
-#                     hostname='mqtt.beebotte.com', \
-#                     port=8883, \
-#                     auth = {'username':'taichan','token':'{}'.format(MY_BEEBOTTE_TOKEN)}, \
-#                     tls={'ca_certs':'mqtt.beebotte.com.pem'})
 
 # get test
 @app.route("/")
@@ -59,7 +53,6 @@ def handle_message(event):
     led_msg = [s.encode('utf-8') for s in ['LED', '電気']]
     if msg in led_msg:
         publish_gpio_control_msg('on')
-
     else:
         line_bot_api.reply_message(
            event.reply_token,
