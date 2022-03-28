@@ -53,6 +53,14 @@ def handle_message(event):
     led_msg = [s.encode('utf-8') for s in ['LED', '電気']]
     if msg in led_msg:
         publish_gpio_control_msg('on')
+    elif msg == 'ID'.encode('utf-8'):
+        try:
+            id_msg = event.source.user_id
+        except:
+            id_msg = 'error'
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=id_msg))
     else:
         line_bot_api.reply_message(
            event.reply_token,
