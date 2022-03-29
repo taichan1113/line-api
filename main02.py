@@ -53,8 +53,8 @@ def handle_message(event):
     msg = event.message.text.encode('utf-8')
     test_msg = [s.encode('utf-8') for s in ['test', 'テスト']]
     if msg in test_msg:
-        client.publish(MQTT_TOPIC, 'test message published correctly', 1)
         line_bot_api.push_message(MY_LINE_USER_ID, TextSendMessage(text='publishing...'))
+#         client.publish(MQTT_TOPIC, 'test message published correctly', 1)
     else:
         line_bot_api.reply_message(
            event.reply_token,
@@ -66,14 +66,13 @@ def handle_follow(event):
        event.reply_token,
        TextSendMessage(text='友達追加ありがとう'))
 
-def on_connect(client, userdata, rc):
-    line_bot_api.push_message(MY_LINE_USER_ID, TextSendMessage(text='server connected'))
-    client.subscribe(MQTT_TOPIC)
+def on_connect(client, userdata, flag, rc):
+    client.subscribe(MQTT_TOPIC, 1)
 
 def on_message(client, userdata, msg):
     get_msg = msg.payload.decode('utf-8')
     print(get_msg)
-    line_bot_api.push_message(MY_LINE_USER_ID, TextSendMessage(text=get_msg))
+    line_bot_api.push_message(MY_LINE_USER_ID, TextSendMessage(text='THIS IS TEST'))
     
 if __name__ == "__main__":
     
