@@ -66,6 +66,7 @@ def handle_follow(event):
        TextSendMessage(text='友達追加ありがとう'))
 
 def on_connect(client, userdata, rc):
+    line_bot_api.push_message(MY_LINE_USER_ID, TextSendMessage(text='server connected'))
     client.subscribe(MQTT_TOPIC)
 
 def on_message(client, userdata, msg):
