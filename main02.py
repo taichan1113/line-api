@@ -72,7 +72,7 @@ def on_connect(client, userdata, flag, rc):
 def on_message(client, userdata, msg):
     get_msg = msg.payload.decode('utf-8')
     print(get_msg)
-    line_bot_api.push_message(MY_LINE_USER_ID, TextSendMessage(text='THIS IS TEST'))
+    line_bot_api.push_message(MY_LINE_USER_ID, TextSendMessage(text=get_msg))
     
 if __name__ == "__main__":
     
