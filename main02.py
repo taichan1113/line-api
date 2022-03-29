@@ -54,7 +54,7 @@ def handle_message(event):
     test_msg = [s.encode('utf-8') for s in ['test', 'テスト']]
     if msg in test_msg:
         line_bot_api.push_message(MY_LINE_USER_ID, TextSendMessage(text='publishing...'))
-#         client.publish(MQTT_TOPIC, 'test message published correctly', 1)
+        client.publish(MQTT_TOPIC, 'test message published correctly', 1)
     else:
         line_bot_api.reply_message(
            event.reply_token,
