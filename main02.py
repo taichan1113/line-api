@@ -51,18 +51,10 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     msg = event.message.text.encode('utf-8')
+    user = event.source.user_id
     test_msg = [s.encode('utf-8') for s in ['test', 'テスト']]
     if msg in test_msg:
-        line_bot_api.push_message(MY_LINE_USER_ID, TextSendMessage(text='publishing...'))
-        client.publish(MQTT_TOPIC, 'test message published correctly', 1)
-    elif msg == 'ID'.encode('utf-8'):
-        try:
-            id_msg = event.source.user_id
-        except:
-            id_msg = 'error'
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=id_msg))
+        line_bot_api.push_message(user, TextSendMessage(text='publishing...'))
     else:
         line_bot_api.reply_message(
            event.reply_token,
