@@ -51,10 +51,10 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     msg = event.message.text.encode('utf-8')
-    user = event.source.user_id
+    userID = event.source.user_id
     test_msg = [s.encode('utf-8') for s in ['test', 'テスト']]
     if msg in test_msg:
-        line_bot_api.push_message(user, TextSendMessage(text='publishing...'))
+        line_bot_api.push_message(userID, TextSendMessage(text='publishing...'))
     else:
         line_bot_api.reply_message(
            event.reply_token,
