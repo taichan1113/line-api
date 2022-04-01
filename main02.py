@@ -55,6 +55,7 @@ def handle_message(event):
     test_msg = [s.encode('utf-8') for s in ['test', 'テスト']]
     if msg in test_msg:
         line_bot_api.push_message(userID, TextSendMessage(text='publishing...'))
+        client.publish(MQTT_TOPIC, userID, 1)
     else:
         line_bot_api.reply_message(
            event.reply_token,
@@ -70,9 +71,8 @@ def on_connect(client, userdata, flag, rc):
     client.subscribe(MQTT_TOPIC, 1)
 
 def on_message(client, userdata, msg):
-    get_msg = msg.payload.decode('utf-8')
-    print(get_msg)
-    line_bot_api.push_message(MY_LINE_USER_ID, TextSendMessage(text=get_msg))
+    userID = msg.payload.decode('utf-8')
+    line_bot_api.push_message(userID, TextSendMessage(text='test message published correctly'))
     
 if __name__ == "__main__":
     
