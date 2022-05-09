@@ -52,7 +52,7 @@ def handle_postback(event):
   line_bot_api.push_message(userID, TextSendMessage(text=data))
 
   if data == 'service==water':
-    service = WaterService()
+    service = WaterService(MY_BEEBOTTE_TOKEN, MQTT_TOPIC)
     msg = service.serve()
     line_bot_api.push_message(userID, TextSendMessage(text=msg))
 
