@@ -13,7 +13,7 @@ from linebot.models import (
    ImageMessage, AudioMessage, PostbackEvent
 )
 
-from Service import Services
+from Service.waterService import WaterService
 
 app = Flask(__name__)
 # ENV. variable 
@@ -47,13 +47,14 @@ def callback():
 # postback
 @handler.add(PostbackEvent)
 def handle_postback(event):
-  service = Services.Services(MY_BEEBOTTE_TOKEN)
-
   userID = event.source.user_id
   data = event.postback.data
   line_bot_api.push_message(userID, TextSendMessage(text=data))
-  
-  # client.publish(MQTT_TOPIC, data, 1)
+
+  if data == 'service==water':
+    service = WaterService()
+    msg = service.serve()
+    line_bot_api.push_message(userID, TextSendMessage(text=msg))
 
 # repeat message bot
 @handler.add(MessageEvent, message=TextMessage)

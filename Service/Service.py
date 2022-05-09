@@ -1,6 +1,6 @@
 import paho.mqtt.client as mqtt
 
-class Services:
+class Service:
   def __init__(self, beebotteToken, mqttTopic):
     self.mqttTopic = mqttTopic
     self.beebotteToken = beebotteToken
