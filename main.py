@@ -13,7 +13,6 @@ from linebot.models import (
 
 import paho.mqtt.client as mqtt
 
-
 app = Flask(__name__)
 # ENV. variable 
 MY_CHANNEL_ACCESS_TOKEN = os.environ["MY_CHANNEL_ACCESS_TOKEN"]
