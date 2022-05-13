@@ -33,7 +33,7 @@ client.tls_set("mqtt.beebotte.com.pem")
 client.username_pw_set("token:{}".format(MY_BEEBOTTE_TOKEN))
 client.connect("mqtt.beebotte.com", 8883, 60)
 def onConnect(client, userdata, flag, rc):
-  client.subscribe(self.mqttTopic, 1)
+  client.subscribe(MQTT_TOPIC, 1)
 def onMessage(client, userdata, msg):
   message = msg.payload.decode('utf-8')
   line_bot_api.push_message(MY_LINE_USER_ID, TextSendMessage(text=message))
@@ -87,6 +87,6 @@ if __name__ == "__main__":
   client.on_connect = onConnect
   client.on_message = onMessage
   client.loop_start()
-  
+
   port = int(os.getenv("PORT"))
   app.run(host="0.0.0.0", port=port)
