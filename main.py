@@ -37,9 +37,6 @@ def onConnect(client, userdata, flag, rc):
 def onMessage(client, userdata, msg):
   message = msg.payload.decode('utf-8')
   line_bot_api.push_message(MY_LINE_USER_ID, TextSendMessage(text=message))
-client.on_connect = onConnect
-client.on_message = onMessage
-client.loop_start()
 
 # Test (GET)
 @app.route("/")
@@ -87,5 +84,9 @@ def handle_follow(event):
     TextSendMessage(text='友達追加ありがとう'))
 
 if __name__ == "__main__":
+  client.on_connect = onConnect
+  client.on_message = onMessage
+  client.loop_start()
+  
   port = int(os.getenv("PORT"))
   app.run(host="0.0.0.0", port=port)
