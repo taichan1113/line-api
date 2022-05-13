@@ -13,9 +13,11 @@ from linebot.models import (
    ImageMessage, AudioMessage, PostbackEvent
 )
 
-from Service.waterService import WaterService
+import paho.mqtt.client as mqtt
+# from Service.waterService import WaterService
 
 app = Flask(__name__)
+
 # ENV. variable 
 MY_CHANNEL_ACCESS_TOKEN = os.environ["MY_CHANNEL_ACCESS_TOKEN"]
 MY_CHANNEL_SECRET = os.environ["MY_CHANNEL_SECRET"]
@@ -26,6 +28,18 @@ line_bot_api = LineBotApi(MY_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(MY_CHANNEL_SECRET)
 # MQTT settings
 MQTT_TOPIC = 'home_IoT/watering_system'
+client = mqtt.Client()
+client.tls_set("mqtt.beebotte.com.pem")
+client.username_pw_set("token:{}".format(MY_BEEBOTTE_TOKEN))
+client.connect("mqtt.beebotte.com", 8883, 60)
+def onConnect(client, userdata, flag, rc):
+  client.subscribe(self.mqttTopic, 1)
+def onMessage(client, userdata, msg):
+  message = msg.payload.decode('utf-8')
+  line_bot_api.push_message(MY_LINE_USER_ID, TextSendMessage(text=message))
+client.on_connect = onConnect
+client.on_message = onMessage
+client.loop_start()
 
 # Test (GET)
 @app.route("/")
@@ -52,9 +66,10 @@ def handle_postback(event):
   line_bot_api.push_message(userID, TextSendMessage(text=data))
 
   if data == 'service=water':
-    service = WaterService(MY_BEEBOTTE_TOKEN, MQTT_TOPIC)
-    service.serve()
-    line_bot_api.push_message(userID, TextSendMessage(text=service.message))
+    client.publish(MQTT_TOPIC, 'water service test', 1)
+    # service = WaterService(MY_BEEBOTTE_TOKEN, MQTT_TOPIC)
+    # service.serve()
+    # line_bot_api.push_message(userID, TextSendMessage(text=service.message))
 
 # repeat message bot
 @handler.add(MessageEvent, message=TextMessage)
