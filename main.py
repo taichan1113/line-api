@@ -23,13 +23,14 @@ MY_BEEBOTTE_TOKEN = os.environ["MY_BEEBOTTE_TOKEN"]
 line_bot_api = LineBotApi(MY_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(MY_CHANNEL_SECRET)
 # MQTT settings
-MQTT_TOPIC = 'home_IoT/watering_system'
+MQTT_TOPIC_SERVER = 'home_IoT/watering_system_server'
+MQTT_TOPIC_DEVICE = 'home_IoT/watering_system_device'
 client = mqtt.Client()
 client.tls_set("mqtt.beebotte.com.pem")
 client.username_pw_set("token:{}".format(MY_BEEBOTTE_TOKEN))
 client.connect("mqtt.beebotte.com", 8883, 60)
 def onConnect(client, userdata, flag, rc):
-  client.subscribe(MQTT_TOPIC, 1)
+  client.subscribe(MQTT_TOPIC_SERVER, 1)
 def onMessage(client, userdata, msg):
   message = msg.payload.decode('utf-8')
   line_bot_api.push_message(MY_LINE_USER_ID, TextSendMessage(text=message))
@@ -57,7 +58,8 @@ def handle_postback(event):
   userID = event.source.user_id
   data = event.postback.data
   # line_bot_api.push_message(userID, TextSendMessage(text=data))
-  client.publish(MQTT_TOPIC, data, 1)
+  client.publish(MQTT_TOPIC_DEVICE, data, 1)
+  client.publish(MQTT_TOPIC_SERVER, data, 1)
 
 # repeat message bot
 @handler.add(MessageEvent, message=TextMessage)
