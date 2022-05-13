@@ -4,17 +4,16 @@ class WaterService:
   def __init__(self, beebotteToken, mqttTopic):
     self.mqttTopic = mqttTopic
     self.beebotteToken = beebotteToken
-    self.message = ''
+    self.message = 'this message should be overwritten'
 
-    client = mqtt.Client()
-    client.tls_set("mqtt.beebotte.com.pem")
-    client.username_pw_set("token:{}".format(self.beebotteToken))
-    client.connect("mqtt.beebotte.com", 8883, 60)
+    self.client = mqtt.Client()
+    self.client.tls_set("mqtt.beebotte.com.pem")
+    self.client.username_pw_set("token:{}".format(self.beebotteToken))
+    self.client.connect("mqtt.beebotte.com", 8883, 60)
     
-    client.on_connect = self.onConnect
-    client.on_message = self.onMessage
+    self.client.on_connect = self.onConnect
+    self.client.on_message = self.onMessage
 
-    self.client = client
     self.client.loop_start()
 
   # MQTT methods
@@ -27,6 +26,3 @@ class WaterService:
     
   def serve(self):
     self.client.publish(self.mqttTopic, 'serve test', 1)
-    return self.message
-
-

@@ -53,8 +53,8 @@ def handle_postback(event):
 
   if data == 'service=water':
     service = WaterService(MY_BEEBOTTE_TOKEN, MQTT_TOPIC)
-    msg = service.serve()
-    line_bot_api.push_message(userID, TextSendMessage(text=msg))
+    service.serve()
+    line_bot_api.push_message(userID, TextSendMessage(text=service.message))
 
 # repeat message bot
 @handler.add(MessageEvent, message=TextMessage)
