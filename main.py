@@ -5,19 +5,16 @@ from flask import Flask, request, abort
 from linebot import (
    LineBotApi, WebhookHandler
 )
-from linebot.exceptions import (
-   InvalidSignatureError
-)
+from linebot.exceptions import InvalidSignatureError
 from linebot.models import (
    MessageEvent, TextMessage, TextSendMessage, FollowEvent,
    ImageMessage, AudioMessage, PostbackEvent
 )
 
 import paho.mqtt.client as mqtt
-# from Service.waterService import WaterService
+
 
 app = Flask(__name__)
-
 # ENV. variable 
 MY_CHANNEL_ACCESS_TOKEN = os.environ["MY_CHANNEL_ACCESS_TOKEN"]
 MY_CHANNEL_SECRET = os.environ["MY_CHANNEL_SECRET"]
@@ -60,13 +57,8 @@ def callback():
 def handle_postback(event):
   userID = event.source.user_id
   data = event.postback.data
-  line_bot_api.push_message(userID, TextSendMessage(text=data))
-
-  if data == 'service=water':
-    client.publish(MQTT_TOPIC, 'water service test', 1)
-    # service = WaterService(MY_BEEBOTTE_TOKEN, MQTT_TOPIC)
-    # service.serve()
-    # line_bot_api.push_message(userID, TextSendMessage(text=service.message))
+  # line_bot_api.push_message(userID, TextSendMessage(text=data))
+  client.publish(MQTT_TOPIC, data, 1)
 
 # repeat message bot
 @handler.add(MessageEvent, message=TextMessage)
