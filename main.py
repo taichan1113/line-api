@@ -56,6 +56,8 @@ def callback():
 @handler.add(PostbackEvent)
 def handle_postback(event):
   userID = event.source.user_id
+  if userID != MY_LINE_USER_ID:
+    return
   data = event.postback.data
   # line_bot_api.push_message(userID, TextSendMessage(text=data))
   client.publish(MQTT_TOPIC_DEVICE, data, 1)
