@@ -2,6 +2,7 @@ from crypt import methods
 import os
 
 from flask import Flask, flash, request, abort, redirect, url_for, send_from_directory, render_template
+from werkzeug.utils import secure_filename
 
 from linebot import (
    LineBotApi, WebhookHandler
@@ -71,8 +72,9 @@ def upload_file():
     # ファイルのチェック
     if file and allwed_file(file.filename):
       # 危険な文字を削除（サニタイズ処理）
-      # filename = secure_filename(file.filename)
-      filename = file.filename
+      filename = secure_filename(file.filename)
+      # filename = file.filename
+      print(filename)
       # ファイルの保存
       file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
       # アップロード後のページに転送
