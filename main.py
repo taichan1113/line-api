@@ -1,6 +1,7 @@
+from crypt import methods
 import os
 
-from flask import Flask, request, abort
+from flask import Flask, flash, request, abort, redirect, url_for, send_from_directory
 
 from linebot import (
    LineBotApi, WebhookHandler
@@ -13,7 +14,15 @@ from linebot.models import (
 
 import paho.mqtt.client as mqtt
 
+
+UPLOAD_FOLDER = "./uploads"
+ALLOWED_EXTENSIONS = set(['mp4', 'wmv'])
+
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+def allwed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 # ENV. variable 
 MY_CHANNEL_ACCESS_TOKEN = os.environ["MY_CHANNEL_ACCESS_TOKEN"]
 MY_CHANNEL_SECRET = os.environ["MY_CHANNEL_SECRET"]
@@ -39,6 +48,35 @@ def onMessage(client, userdata, msg):
 @app.route("/")
 def hello_world():
   return "hello world!"
+
+# upload movie file
+@app.route("/uploads", methods=["POST"])
+def upload_file():
+  # f = request.files["the_file"]
+  # ファイルがなかった場合の処理
+  if 'file' not in request.files:
+      flash('ファイルがありません')
+      return redirect(request.url)
+  # データの取り出し
+  file = request.files['file']
+  # ファイル名がなかった時の処理
+  if file.filename == '':
+      flash('ファイルがありません')
+      return redirect(request.url)
+  # ファイルのチェック
+  if file and allwed_file(file.filename):
+      # 危険な文字を削除（サニタイズ処理）
+      # filename = secure_filename(file.filename)
+      filename = file.filename
+      # ファイルの保存
+      file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+      # アップロード後のページに転送
+      return redirect(url_for('uploaded_file', filename=filename))
+
+@app.route('/uploads/<filename>')
+# ファイルを表示する
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 # Webhook request (POST)
 @app.route("/callback", methods=['POST'])
