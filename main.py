@@ -6,7 +6,7 @@ from werkzeug.utils import secure_filename
 
 from linebot import (
    LineBotApi, WebhookHandler
-)
+) 
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import (
    MessageEvent, TextMessage, TextSendMessage, FollowEvent,
@@ -21,7 +21,7 @@ ALLOWED_EXTENSIONS = set(['mp4', 'wmv', 'jpg', 'png'])
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-def allwed_file(filename):
+def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # ENV. variable 
@@ -50,10 +50,10 @@ def onMessage(client, userdata, msg):
 def hello_world():
   return "hello world!"
 
-# view uploaded file
-@app.route("/upload", methods=["GET"])
-def uploaded_file_view():
-  return render_template("index.html")
+# # view uploaded file
+# @app.route("/upload", methods=["GET"])
+# def uploaded_file_view():
+#   return render_template("index.html")
 
 # upload  file
 @app.route("/uploads", methods=["GET", "POST"])
@@ -70,7 +70,7 @@ def upload_file():
       flash('ファイルがありません')
       return redirect(request.url)
     # ファイルのチェック
-    if file and allwed_file(file.filename):
+    if file and allowed_file(file.filename):
       # 危険な文字を削除（サニタイズ処理）
       filename = secure_filename(file.filename)
       # filename = file.filename
