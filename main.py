@@ -16,7 +16,7 @@ import paho.mqtt.client as mqtt
 
 
 UPLOAD_FOLDER = "./uploads"
-ALLOWED_EXTENSIONS = set(['mp4', 'wmv'])
+ALLOWED_EXTENSIONS = set(['mp4', 'wmv', 'jpg', 'png'])
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
