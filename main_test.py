@@ -50,60 +50,6 @@ def onMessage(client, userdata, msg):
 def hello_world():
   return "Hello from PONTA!"
 
-# # view uploaded file
-# @app.route("/upload", methods=["GET"])
-# def uploaded_file_view():
-#   return render_template("index.html")
-
-# upload  file
-@app.route("/uploads", methods=["GET", "POST"])
-def upload_file():
-  if request.method == "POST":
-    # ファイルがなかった場合の処理
-    if 'file' not in request.files:
-      flash('ファイルがありません')
-      return redirect(request.url)
-    # データの取り出し
-    file = request.files['file']
-    # ファイル名がなかった時の処理
-    if not file.filename:
-      flash('ファイルがありません')
-      return redirect(request.url)
-    # ファイルのチェック
-    if file and allowed_file(file.filename):
-      # 危険な文字を削除（サニタイズ処理）
-      filename = secure_filename(file.filename)
-      # filename = file.filename
-      print(filename)
-      # ファイルの保存
-      file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-      # アップロード後のページに転送
-      return redirect(url_for('uploaded_file', filename=filename))
-  return '''
-  <!doctype html>
-  <html>
-      <head>
-          <meta charset="UTF-8">
-          <title>
-              ファイルをアップロードして判定しよう
-          </title>
-      </head>
-      <body>
-          <h1>
-              ファイルをアップロードして判定しよう
-          </h1>
-          <form method = post enctype = multipart/form-data>
-          <p><input type=file name = file>
-          <input type = submit value = Upload>
-          </form>
-      </body>
-  '''
-
-@app.route('/uploads/<filename>')
-# ファイルを表示する
-def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
-
 # Webhook request (POST)
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -130,10 +76,11 @@ def handle_postback(event):
 # repeat message bot
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
+  print('get message')
   msg = event.message.text
   line_bot_api.reply_message(
     event.reply_token,
-    TextSendMessage(text=msg+'This is from AWS'))
+    TextSendMessage(text=msg))
 
 # follow event
 @handler.add(FollowEvent)
